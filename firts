@@ -1,0 +1,103 @@
+#include <iostream> //simple filemanager
+#include <stdio.h>
+#include <windows.h>
+#include <winbase.h>
+using namespace std;
+WIN32_FIND_DATA wfd;
+HANDLE hFile;
+HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+CONSOLE_SCREEN_BUFFER_INFO SCRN_INFO;
+COORD pos;
+void show(char z[50]);
+void clr();
+void newf(char z[50]);
+char folder[30]="D:/*.*";
+char text[30];
+char fil[30];
+int i1=0;
+int q=1;
+int main()
+{
+int i=0;
+show(folder);
+show(folder);
+while (q) {
+cin>>i;
+if(i<7)cin>>folder;
+switch (i)
+{
+case 1:show(folder);break;
+case 2:newf(folder);break;
+case 3:RemoveDirectory(folder);clr();break;
+case 4:FILE *fp; fp = fopen(folder, "w");fclose(fp);clr();break;
+case 5:FILE *fp1; fp1 = fopen(folder, "r");
+fscanf(fp1,"%s",&fil);
+clr();
+pos.X=5;
+pos.Y=10;
+SetConsoleCursorPosition(hOutput,pos);
+SetConsoleTextAttribute(hOutput, 30);
+cout<<fil;
+pos.X=46;
+pos.Y=23;
+fclose(fp1);
+fp1 = fopen(folder, "w");
+cin>>text;
+fprintf(fp1,"%s",fil);
+fprintf(fp1,"%s",text);
+SetConsoleCursorPosition(hOutput,pos);
+fclose(fp1);
+break;
+case 6:DeleteFile(folder);clr();break;
+case 7:q=0;break;
+}
+}
+}
+void show(char z[50])
+{
+int z1=0;
+clr();
+SetConsoleTextAttribute(hOutput, 30);
+hFile=FindFirstFile(folder, &wfd);
+cout << wfd.cFileName<<endl;
+int i=0;
+for(i=0; i<17; i=i+1)
+{
+z1=FindNextFile(hFile, &wfd);
+pos.X=3;
+pos.Y=(i+3);
+SetConsoleCursorPosition(hOutput,pos);
+if (z1==0) goto m3;
+cout << wfd.cFileName<<endl;
+m3:
+;
+}
+pos.X=46;
+pos.Y=23;
+SetConsoleCursorPosition(hOutput,pos);
+cout<<" ";
+pos.X=46;
+pos.Y=23;
+SetConsoleCursorPosition(hOutput,pos);
+}
+void clr()
+{
+system("cls");
+cout<<folder<<endl;
+SetConsoleTextAttribute(hOutput, 3);
+int j;
+cout<<"____________________________ ___________________________________ _________________";
+SetConsoleTextAttribute(hOutput, 30);
+for(j=0;j<19;j=j+1)
+cout<<" ";
+SetConsoleTextAttribute(hOutput, 3);
+cout<<"____________________________ ___________________________________ _________________";
+cout<<"[1:show fldr][2:new fldr] [3:el fldr][4:new doc] [5:ed doc][6:el doc] [7:exit]";
+SetConsoleTextAttribute(hOutput, 15);
+cout<<"<enter command (command and way to a file)> > " ;
+}
+void newf(char z[30])
+{
+CreateDirectory(folder, 0 );
+clr();
+}        
